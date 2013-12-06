@@ -1,0 +1,40 @@
+In order to install this, you must first install the Sphinx dependencies. Because the version of the Sphinx stuff must be the right version, you can just download a tarball of the correct version of the Sphinx stuff from this project. As of this writing, you want sphinx-deps-0.1.1.tar.gz. Here is how to build the Sphinx libraries and download the code for and build sphinx3_livesegment:
+
+  # if you want ALSA sound (Ubuntu needs this)
+  sudo apt-get install libasound2-dev
+
+  # download sphinx-deps-0.1.1.tar.gz from http://sourceforge.net/projects/voicekey/files/voicekey/0.1.1/sphinx-deps-0.1.1.tar.gz/download
+  tar xovzf sphinx-deps-0.1.1.tar.gz
+  cd sphinx-deps
+  cd sphinxbase/
+
+   make clean
+  ./configure
+  
+  # or, if you want ALSA sound:
+  ./configure --with-alsa; 
+  # and make sure this doesnt fail with "configure: error: ALSA header file <alsa/asoundlib.h> not found!"
+
+  make
+  sudo make install # i'm not sure if this is necessary
+
+  cd ../sphinx3
+
+  # you might have to do:
+  autoreconf -fvi
+  make clean
+
+  ./configure
+  make
+  sudo make install # i'm not sure if this is necessary
+  sudo ldconfig # i'm not sure if this is necessary
+
+  cd ..
+  # for bash:
+  export SPHINXBASE_PATH=`pwd`/sphinxbase
+  export SPHINX3_PATH=`pwd`/sphinx3
+  # hg is "mercurial", a version control system
+  hg clone http://voicekey.hg.sourceforge.net:8000/hgroot/voicekey/livesegment
+  cd livesegment
+  make sphinx3_livesegment
+

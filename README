@@ -1,0 +1,32 @@
+This document is for developers. This is the manual for sphinx3_livesegment.
+
+sphinx3_livesegment is a Sphinx3 application that listens to the microphone, waits for sound followed by silence, and then runs sphinx3 on the sound. It can be used as a "speech recognition daemon". It listens on stdin for a small set of commands which can be used to dynamically switch the language model or change some configuration parameters. It is a souped-up version of pocketsphinx_continuous (tty-continuous.c), ported from pocketsphinx to sphinx3.
+
+sphinx3_livesegment accepts bunch of command line options but i don't know which ones :). However, Sphinx3 programs, including this one, tend to helpfully print out a list of all potential arguments, along with their default values and current values, upon startup. http://www-2.cs.cmu.edu/~archan/documentation/sphinxDoc.pdf contains documentation on the command line arguments.
+
+One argument that is not standard for sphinx3 is -adcdev. This is the location of the microphone device, which may often be one of /dev/dsp, /dev/dsp0, or /dev/dsp1.
+
+sphinx3_livesegment allows the user (or controlling process) to switch the language model and some configuration settings while the program is running by entering commands on stdin. Here are those commands, with sample parameters:
+
+RESET BEAM
+  Reset search procedure of sphinx3. Many configuration changes don't take effect until the next time that you issue this command. Also switches the current language model to the default one.
+
+SET LM name
+  Switch the current language model to the one named "name". Note that you need to use the command line option "-lmctl" to specify it language model control file in order for multiple language models to be available.
+
+SET SILENCE_LENGTH 0.05
+  The length of silence required before sphinx3_livesegment stops listening and starts interpreting an utterance.
+
+
+-- Commands which don't have an effect until you issue "RESET BEAM" --
+Each of these commands is named after a command line argument in has the same effect.
+
+SET BEAM 1e-70
+SET PBEAM 1e-70
+SET WEND_BEAM 1e-70
+SET WBEAM 1e-60
+SET MAXHMMPF 2500
+SET MAXCDSENPF 1500
+SET MAXHISTPF 100
+SET MAXWPF 20
+SET SUBVQBEAM 1e-2
